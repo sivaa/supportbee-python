@@ -1,4 +1,4 @@
-.py[cxo]
+*.py[cxo]
 *.egg-info
 .settings/
 .project
