@@ -87,3 +87,7 @@ Python Library for SupportBee APIs
 	
 ```
 
+- TODO
+* Release on PyPi
+* Add tests
+* Implement remaining APIs (User/Agent/Group, Label, Attachment, Snippet, Webhooks & Reports)
