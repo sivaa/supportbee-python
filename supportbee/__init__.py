@@ -34,26 +34,22 @@ class SupportBee(object):
             else:
                 raise ServerException(response.status_code, response.reason)
     
-    def _request(self, url_slug, params={}, method='get'):
+    def _request(self, url_slug, params={}, method='GET'):
         params['auth_token'] = self.auth_token
         headers = {'Content-Type': 'application/json', 'Accept': 'application/json'}
 
-        if method.lower() == 'get':
+        if method.upper() == 'GET':
             r = requests.get('%s%s' % (self.url, url_slug), params=params, headers=headers)
-        elif method.lower() == 'post':
+        elif method.upper() == 'POST':
             r = requests.post('%s%s' % (self.url, url_slug), data=json.dumps(params), headers=headers)
+        elif method.upper() == 'DELETE':
+            r = requests.delete('%s%s' % (self.url, url_slug), params=params, headers=headers)
         else:
             raise SupportBeeException("Unsupported Request")
 
-        print r.request.headers
-        print r.request.url
-        print r.headers
-        print r.status_code
-           
         if r.ok and not r.status_code == 204:
             return r.json()
 
-        # r.raise_for_status()
         self._raise_exception(r)
         
     def fetch_tickets(self, **kwargs):
@@ -76,14 +72,13 @@ class SupportBee(object):
         """
         return self._request('/tickets/%s.json' % (ticket_id))
 
-
     def archive_ticket(self, ticket_id):
         """
         Archives the given ticket. Supported parameters are available at https://developers.supportbee.com/api#ticket_actions
         Params
             ticket_id: SuppportBee Ticket ID
         """
-        return self._request('/tickets/%s/archive.json' % (ticket_id), method='post')
+        return self._request('/tickets/%s/archive.json' % (ticket_id), method='POST')
 
 
     def unarchive_ticket(self, ticket_id):
@@ -92,4 +87,88 @@ class SupportBee(object):
         Params
             ticket_id: SuppportBee Ticket ID
         """
-        return self._request('/tickets/%s/archive.json' % (ticket_id), method='post')
+        return self._request('/tickets/%s/archive.json' % (ticket_id), method='DELETE')
+
+    def assign_ticket(self, tickect_id, data):
+        """
+        Supported data as dictionary. Valid options are available at https://developers.supportbee.com/api#ticket_actions 
+        Params
+            ticket_id: SuppportBee Ticket ID
+            data     : JSON/Dict represents the User/Group ID
+        """
+        return self._request( '/tickets/%s/assignments.json' % (tickect_id) , data, 'post')
+
+    def star_ticket(self, ticket_id):
+        """
+        Stars the given ticket. Supported parameters are available at https://developers.supportbee.com/api#ticket_actions
+        Params
+            ticket_id: SuppportBee Ticket ID
+        """
+        return self._request('/tickets/%s/star.json' % (ticket_id), method='POST')
+
+
+    def unstar_ticket(self, ticket_id):
+        """
+        Unstars the given ticket. Supported parameters are available at https://developers.supportbee.com/api#ticket_actions
+        Params
+            ticket_id: SuppportBee Ticket ID
+        """
+        return self._request('/tickets/%s/star.json' % (ticket_id), method='DELETE')
+
+
+    def spam_ticket(self, ticket_id):
+        """
+        Spams the given ticket. Supported parameters are available at https://developers.supportbee.com/api#ticket_actions
+        Params
+            ticket_id: SuppportBee Ticket ID
+        """
+        return self._request('/tickets/%s/spam.json' % (ticket_id), method='POST')
+
+
+    def unspam_ticket(self, ticket_id):
+        """
+        Un-spam the given ticket. Supported parameters are available at https://developers.supportbee.com/api#ticket_actions
+        Params
+            ticket_id: SuppportBee Ticket ID
+        """
+        return self._request('/tickets/%s/spam.json' % (ticket_id), method='DELETE')
+
+
+    def trash_ticket(self, ticket_id):
+        """
+        Trashes the given ticket. Supported parameters are available at https://developers.supportbee.com/api#ticket_actions
+        Params
+            ticket_id: SuppportBee Ticket ID
+        """
+        return self._request('/tickets/%s/trash.json' % (ticket_id), method='POST')
+
+
+    def untrash_ticket(self, ticket_id):
+        """
+        Un-trashes the given ticket. Supported parameters are available at https://developers.supportbee.com/api#ticket_actions
+        Params
+            ticket_id: SuppportBee Ticket ID
+        """
+        return self._request('/tickets/%s/trash.json' % (ticket_id), method='DELETE')
+
+    def fetch_replies(self, ticket_id):
+        """
+        Fetches all the replies for the given ticket. More details are available at https://developers.supportbee.com/api#fetching_replies 
+        """
+        return self._request('/tickets/%s/replies.json' % (ticket_id))
+
+    def create_reply(self, ticket_id, data):
+        """
+        Supported data as dictionary. Valid options are available at https://developers.supportbee.com/api#create_reply 
+        """
+        return self._request('/tickets/%s/replies.json' % (ticket_id), data, 'post')
+
+    def show_reply(self, ticket_id, reply_id):
+        """
+        Fetches the reply for the given ticket & reply Id. Supported parameters are available at https://developers.supportbee.com/api#show_reply
+        Params
+            ticket_id: SuppportBee Ticket ID
+            reply_id: Reply Id
+        """
+        return self._request('/tickets/%s/replies/%s.json' % (ticket_id, reply_id))
+
