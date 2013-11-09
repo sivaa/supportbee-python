@@ -36,11 +36,11 @@ Python Library for SupportBee APIs
     sb.show_ticket(sample_ticket_id1)
 
     # Assign to the User 
-    data = { "assignment" : { "user_id" : MY_USER_ID } }
+    data = { "assignment" : { "user_id" : <USER_ID> } }
     sb.assign_ticket(sample_ticket_id1, data)
 
     # Assign to the Group
-    data = { "assignment" : {"group_id" : SALES_GROUP_ID} }
+    data = { "assignment" : {"group_id" : <GROUP_ID>} }
     sb.assign_ticket(sample_ticket_id2, data)
     
     # Fetch Replies
