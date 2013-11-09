@@ -2,12 +2,15 @@
 from supportbee import SupportBee
 from pprint import pprint
 from time import sleep
+import sys
 
-MY_USER_ID = '531274'
-SALES_GROUP_ID = '1970'
+ACCOUNT_NAME = sys.argv[1]
+AUTH_TOKEN = sys.argv[2]
+MY_USER_ID = sys.argv[3] 
+SALES_GROUP_ID = sys.argv[4] 
 
 if __name__ == '__main__':
-    sb = SupportBee('supportbee-python', 'R8RfBRuKqGctyJeVx9xe')
+    sb = SupportBee(ACCOUNT_NAME, AUTH_TOKEN)
 
     # Delete all the tickets
     print "\n\n Cleaning up the Mailbox \n" + 75 * "="
@@ -20,7 +23,7 @@ if __name__ == '__main__':
     
     # Ticket Create
     print "\n\n Creating the First Ticket \n" + 75 * "="
-    data = {"ticket": {"subject" : "Ticket 01", "requester_name": "Siva Arun", "requester_email": "siva@sivaa.in", "cc": ["Krace <me@kracekumar.com>",], 
+    data = {"ticket": {"subject" : "Ticket 01", "requester_name": "Siva Arun", "requester_email": "siva@sivaa.in", "cc": ["Krace <me@kracekumar.com>", ],
                        "content":{"html":" <h1>Content of Ticket 01 </h1>", }}
             }
     ticket_data = sb.create_ticket(data)
@@ -29,7 +32,7 @@ if __name__ == '__main__':
     sleep(4)
 
     print "\n\n Creating the Second Ticket \n" + 75 * "="
-    data = {"ticket": {"subject" : "Ticket 02", "requester_name": "Siva Arun", "requester_email": "siva@sivaa.in", "cc": ["Krace <me@kracekumar.com>",], 
+    data = {"ticket": {"subject" : "Ticket 02", "requester_name": "Siva Arun", "requester_email": "siva@sivaa.in", "cc": ["Krace <me@kracekumar.com>", ],
                        "content":{"html":" <h1>Content of Ticket 02 </h1>", }}
             }  
     ticket_data = sb.create_ticket(data)
@@ -65,14 +68,14 @@ if __name__ == '__main__':
     
     # Create Reply
     print "\n\n Creating First Reply for First Ticket \n" + 75 * "="
-    data =  {"reply":{"content":{ "html":" <u> Demo reply 01 </u>  Do you have the milestone 01?", "attachment_ids":[] } } }
+    data = {"reply":{"content":{ "html":" <u> Demo reply 01 </u>  Do you have the milestone 01?", "attachment_ids":[] } } }
     reply_data = sb.create_reply(sample_ticket_id1, data)
     samply_reply_id1 = reply_data['reply']['id'] 
     pprint(reply_data)
     sleep(10)
     
     print "\n\n Creating Second Reply for First Ticket \n" + 75 * "="
-    data =  {"reply":{"content":{ "html":" <u> Demo reply 02 </u>  Do you have the milestone 02?", "attachment_ids":[] } } }
+    data = {"reply":{"content":{ "html":" <u> Demo reply 02 </u>  Do you have the milestone 02?", "attachment_ids":[] } } }
     reply_data = sb.create_reply(sample_ticket_id1, data)
     samply_reply_id2 = reply_data['reply']['id'] 
     pprint(reply_data)
